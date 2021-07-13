@@ -1,0 +1,51 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+{{ super() }}
+	<style>
+		body { background: #e8f1f9; }
+        table, th, td {border: 1px solid black; text-align: center; padding: 15px;}
+	</style>
+{% endblock %}
+
+
+{% block title %}
+Sprayer Calibration
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-8 mx-lg-auto mx-md-auto">
+
+      <h1 class="pt-5 pb-2">Calculating amounts for your Sprayer!</h1>
+
+      {{ wtf.quick_form(form) }}
+        {% if ounce_result %}
+        <p class="pt-5">This means you are spraying <strong>{{"%.2f"|format(ounce_result)}} ounces ({{"%.2f"|format(gallon_result)}} gallons)</strong> every 1000 square feet.</p>
+        <table>
+          <tr>
+            <th>Rate per 1,000 sq. ft</th>
+            <th>Amount to add per gallon of water</th>
+            <th>Ounces per full Sprayer</th>
+          </tr>
+          {% for x in range(0, 21) %}
+          <tr>
+            <td>{{x * 0.5}} oz</td>
+            <td>{{ "%.2f"|format( x * 0.5 / gallon_result) }} oz</td>
+            <td>{{ "%.2f"|format( x * 0.5 / gallon_result * sprayer_size) }} oz</td>
+          </tr>
+          {% endfor %}
+        </table>
+        {% endif %}
+
+      <p class="pt-5"><strong>{{ message }}</strong></p>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
